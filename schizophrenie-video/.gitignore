@@ -1,11 +1,8 @@
 node_modules/
 audio/*.wav
 audio/sentences/
-render/tmp/
-render/stills/
-render/master*.mp4
-render/*.log
 __pycache__/
 tools/.gp_*
-render/audio_analysis/
-render/*.png
+render/*
+!render/final.mp4
+!render/preview.mp4
