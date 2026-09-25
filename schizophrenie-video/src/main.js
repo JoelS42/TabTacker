@@ -147,9 +147,9 @@ const farLayer = rasterSmooth(W + FAR_PAD * 2, H + FAR_PAD * 2, 8, (lx, ly) => {
   const teal = gauss2(x, y, W * 0.86, H * 0.84, W * 0.3, H * 0.4) * n2;
   const blue = gauss2(x, y, W * 0.56, H * 0.5, W * 0.36, H * 0.42) * n3;
   const rose = gauss2(x, y, W * 0.93, H * 0.08, W * 0.2, H * 0.3) * n1;
-  r += violet * 9.5 + teal * 0 + blue * 3 + rose * 5;
-  g += violet * 4 + teal * 9 + blue * 6.5 + rose * 1.5;
-  b += violet * 17 + teal * 11 + blue * 15 + rose * 8;
+  r += violet * 11 + teal * 0 + blue * 3 + rose * 5.5;
+  g += violet * 4.5 + teal * 10.5 + blue * 6.5 + rose * 1.5;
+  b += violet * 20 + teal * 13 + blue * 15 + rose * 9;
   return [r, g, b];
 }, 1234);
 
@@ -344,7 +344,7 @@ function renderFrame(t) {
 }
 
 // ------------------------------------------------------------ Untertitel (max. 2 Zeilen, Wort-Highlight)
-const SUB = { size: 36, weight: 500, lh: 1.3, padX: 32, padY: 13, bottom: 1026, oneLine: 1180, maxW: 1400, radius: 18 };
+const SUB = { size: 36, weight: 500, lh: 1.3, padX: 32, padY: 12, bottom: 1023, oneLine: 1180, maxW: 1400, radius: 18 };
 const SUB_FONT = `${SUB.weight} ${SUB.size}px ${FONT.text}`;
 
 const subtitleChunks = (() => {
@@ -427,6 +427,9 @@ function subtitleLayout(c, idx) {
   return L;
 }
 
+const SUB_MORPH_PRE = 0.1, SUB_MORPH = 0.2;
+const morphK = (tb, t) => ease.inOut(clamp((t - (tb - SUB_MORPH_PRE)) / SUB_MORPH));
+
 function drawSubtitles(c, t) {
   const idx = subtitleIndexAt(t);
   if (idx < 0) return;
@@ -436,10 +439,14 @@ function drawSubtitles(c, t) {
   const boxIn = ch.linkPrev ? 1 : ease.out(clamp((t - ch.show0) / 0.22));
   const boxOut = ch.linkNext ? 1 : clamp((ch.show1 - t) / 0.2);
   const boxA = boxIn * boxOut;
+  // Box-Morph über die Grenze hinweg (beginnt kurz vor dem Wechsel) – in beiden Untertiteln
+  // dieselbe Formel, daher stetig.
   let bw = L.w, bh = L.h;
-  if (ch.linkPrev) {
-    const P = subtitleLayout(c, idx - 1);
-    const m = ease.inOut(clamp((t - ch.show0) / 0.26));
+  if (ch.linkNext && t >= ch.show1 - SUB_MORPH_PRE) {
+    const N = subtitleLayout(c, idx + 1), m = morphK(ch.show1, t);
+    bw = lerp(L.w, N.w, m); bh = lerp(L.h, N.h, m);
+  } else if (ch.linkPrev) {
+    const P = subtitleLayout(c, idx - 1), m = morphK(ch.show0, t);
     bw = lerp(P.w, L.w, m); bh = lerp(P.h, L.h, m);
   }
   const bx = W / 2 - bw / 2, by = SUB.bottom - bh;
@@ -460,8 +467,8 @@ function drawSubtitles(c, t) {
   roundRect(c, bx + 0.5, by + 0.5, bw - 1, bh - 1, SUB.radius - 0.5); c.stroke();
 
   // Text: kurzes Einblenden mit sanftem Anheben, kurzes Ausblenden vor dem Wechsel
-  const tIn = ease.out(clamp((t - ch.show0) / (ch.linkPrev ? 0.2 : 0.24)));
-  const tOut = clamp((ch.show1 - t) / (ch.linkNext ? 0.09 : 0.2));
+  const tIn = ch.linkPrev ? ease.out(clamp((t - ch.show0 - 0.05) / 0.18)) : ease.out(clamp((t - ch.show0) / 0.24));
+  const tOut = clamp((ch.show1 - t) / (ch.linkNext ? 0.1 : 0.2));
   const ta = tIn * tOut;
   if (ta > 0.003) {
     c.font = SUB_FONT;
@@ -539,7 +546,6 @@ const fmt = (s) => `${Math.floor(s / 60)}:${(s % 60).toFixed(1).padStart(4, '0')
 
 // ------------------------------------------------------------ Render-Schnittstelle (für tools/render.mjs)
 window.__render = {
-  _dbg: () => ({ mid: midLayer.tiles.length, midArea: midLayer.tiles.reduce((a, t) => a + t.w * t.h, 0) / (midLayer.w * midLayer.h), vig: vignette.tiles.length, vigArea: vignette.tiles.reduce((a, t) => a + t.w * t.h, 0) / (W * H) }),
   duration: TL.duration,
   scenes: TL.scenes.map((s) => ({ id: s.id, title: s.title, start: s.start, end: s.end })),
   frame(t) { renderFrame(t); return true; },
@@ -607,9 +613,17 @@ function setupPlayer() {
     if (e.key === 'd') $('tDebug').click();
     if (e.key === 'u') $('tSubs').click();
   });
-  if (params.has('t')) state.t = parseFloat(params.get('t'));
+  if (params.has('t')) state.t = clamp(parseFloat(params.get('t')) || 0, 0, TL.duration);
   renderFrame(state.t);
+  updateHud();
   loop();
+
+  function updateHud() {
+    scrub.value = state.t;
+    $('time').textContent = `${fmt(state.t)} / ${fmt(TL.duration)}`;
+    const sc = TL.scenes[TL.sceneIndexAt(state.t)];
+    $('scene').textContent = `${sc.index + 1}. ${sc.title}`;
+  }
 
   function play() {
     state.playing = true; $('play').textContent = '❚❚ Pause';
@@ -623,7 +637,7 @@ function setupPlayer() {
   function seek(t) {
     state.t = clamp(t, 0, TL.duration);
     for (const a of [voice, music, sfx]) { try { a.currentTime = state.t; } catch (e) { /* noch nicht geladen */ } }
-    if (!state.playing) renderFrame(state.t);
+    if (!state.playing) { renderFrame(state.t); updateHud(); }
   }
   function loop() {
     requestAnimationFrame(loop);
@@ -637,10 +651,7 @@ function setupPlayer() {
     else state.t += dt;
     for (const a of [music, sfx]) if (!a.paused && Math.abs(a.currentTime - state.t) > 0.15) a.currentTime = state.t;
     if (state.t >= TL.duration) { pause(); state.t = TL.duration; }
-    scrub.value = state.t;
-    $('time').textContent = `${fmt(state.t)} / ${fmt(TL.duration)}`;
-    const sc = TL.scenes[TL.sceneIndexAt(state.t)];
-    $('scene').textContent = `${sc.index + 1}. ${sc.title}`;
+    updateHud();
     renderFrame(state.t);
   }
 }
