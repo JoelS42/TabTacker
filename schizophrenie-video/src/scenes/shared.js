@@ -4,8 +4,8 @@
 //  Personen-Piktogramme, Knoten, Partikelströme, Linien-Icons
 // =====================================================================
 import {
-  W, H, TAU, C, clamp, lerp, ease, rng, noise2, fract, rgba, glow, spark, dot, ring, catmull, pointAt, subPath,
-  strokePath, fillPath, glowPath, taper, blobPts, text, pointInPoly, brainOutline, samplesInBrain, smoothstep, mixColor, roundRect,
+  W, H, TAU, C, clamp, lerp, ease, rng, noise2, fract, rgba, glow, glowMany, spark, dot, ring, catmull, pointAt, subPath,
+  strokePath, fillPath, glowPath, taper, deviceScale, blobPts, text, pointInPoly, brainOutline, samplesInBrain, smoothstep, mixColor, roundRect,
 } from '../animation.js';
 
 // ------------------------------------------------------------ Netzwerk
@@ -75,7 +75,12 @@ export function drawNetwork(ctx, net, o = {}) {
   const rv = o.reveal;
   const vis = (n) => (rv ? clamp((rv.r - Math.hypot(n.x - rv.x, n.y - rv.y)) / (rv.soft ?? 60)) : 1);
   const wob = o.wobble ?? 0;
+  // Performance: dünne Kanten (1–1,4 Geräte-px) werden als 1-px-Haarlinie mit entsprechend
+  // höherer Deckkraft gezeichnet (gleiche „Tintenmenge“) – im Software-Renderer ~3× schneller.
+  const ds = deviceScale(ctx);
   ctx.lineCap = 'round';
+  const pulses = [];
+  const ps = { a: null, b: null, cx: 0, cy: 0 };
   for (const e of net.edges) {
     const va = Math.min(vis(e.a), vis(e.b));
     if (va <= 0) continue;
@@ -87,14 +92,16 @@ export function drawNetwork(ctx, net, o = {}) {
     let cx = e.cx, cy = e.cy;
     if (o.straighten) { cx = lerp(cx, (e.a.x + e.b.x) / 2, o.straighten * 0.85); cy = lerp(cy, (e.a.y + e.b.y) / 2, o.straighten * 0.85); }
     if (wob) { cx += noise2(e.ph * 10, t * 0.3) * wob * e.L; cy += noise2(e.ph * 10 + 5, t * 0.3) * wob * e.L; }
-    ctx.strokeStyle = rgba(ecol, ea);
-    ctx.lineWidth = w;
+    ps.a = e.a; ps.b = e.b; ps.cx = cx; ps.cy = cy;
+    const wd = w * ds;
+    if (wd > 1 && wd <= 1.4) { ctx.strokeStyle = rgba(ecol, ea * wd); ctx.lineWidth = 0.999 / ds; }
+    else { ctx.strokeStyle = rgba(ecol, ea); ctx.lineWidth = w; }
     ctx.beginPath();
     ctx.moveTo(e.a.x, e.a.y);
     if (grow >= 1) ctx.quadraticCurveTo(cx, cy, e.b.x, e.b.y);
     else {
       const g = clamp(grow * 1.4 - e.ph * 0.4);
-      for (let s = 1; s <= 8; s++) { const p = qpt({ ...e, cx, cy }, (s / 8) * g); ctx.lineTo(p.x, p.y); }
+      for (let s = 1; s <= 8; s++) { const p = qpt(ps, (s / 8) * g); ctx.lineTo(p.x, p.y); }
     }
     ctx.stroke();
     if (o.myelin && isStrong) {
@@ -107,12 +114,15 @@ export function drawNetwork(ctx, net, o = {}) {
     if (o.pulses && dk > 0.5) {
       const f = fract(t * e.sp * (o.pulseSpeed ?? 1) + e.ph);
       if (f < 0.9 && (e.ph * 7) % 1 < o.pulses) {
-        const p = qpt({ ...e, cx, cy }, f / 0.9);
-        glow(ctx, p.x, p.y, 7 / z, o.pulseColor ?? C.glu, ea * 1.4);
+        const p = qpt(ps, f / 0.9);
+        pulses.push(p.x, p.y, 7 / z, ea * 1.4);
       }
     }
   }
+  // Impulse gesammelt (ein Zustandswechsel statt eines je Impuls)
+  glowMany(ctx, pulses, o.pulseColor ?? C.glu);
   const na = a * (o.nodeAlpha ?? 1);
+  const glows = o.nodeGlow ? new Map() : null;
   for (const n of net.nodes) {
     const va = vis(n);
     if (va <= 0) continue;
@@ -128,8 +138,14 @@ export function drawNetwork(ctx, net, o = {}) {
       }
       ctx.stroke();
     }
-    if (o.nodeGlow) glow(ctx, n.x, n.y, pr * 5, c, na * va * o.nodeGlow);
+    if (glows) {
+      let gl = glows.get(c);
+      if (!gl) { gl = []; glows.set(c, gl); }
+      gl.push(n.x, n.y, pr * 5, na * va * o.nodeGlow);
+    }
   }
+  // Knoten-Leuchten liegt auf dunklem Grund über gleichfarbigem Punkt → 'source-over' (halbe Kosten)
+  if (glows) for (const [c, gl] of glows) glowMany(ctx, gl, c, 0, 'source-over');
 }
 
 // ------------------------------------------------------------ Mikroglia

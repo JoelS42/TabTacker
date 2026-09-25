@@ -6,3 +6,6 @@ render/stills/
 render/master*.mp4
 render/*.log
 __pycache__/
+tools/.gp_*
+render/audio_analysis/
+render/*.png

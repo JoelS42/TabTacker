@@ -185,6 +185,26 @@ export function glow(ctx, x, y, r, color, a = 1, hard = 0) {
   ctx.globalCompositeOperation = prevOp;
 }
 
+/**
+ * Viele Lichtpunkte in einem Zug (gleiche Farbe): spart pro Punkt die Zustandswechsel
+ * von glow(). items: flache Liste [x, y, r, a, x, y, r, a, …].
+ * op: 'lighter' (additiv, wie glow) oder 'source-over' (≈ halbe Kosten; auf dunklem Grund gleich).
+ */
+export function glowMany(ctx, items, color, hard = 0, op = 'lighter') {
+  if (!items.length) return;
+  const prevA = ctx.globalAlpha, prevOp = ctx.globalCompositeOperation;
+  const spr = glowSprite(color, hard);
+  ctx.globalCompositeOperation = op;
+  for (let i = 0; i < items.length; i += 4) {
+    const r = items[i + 2], a = items[i + 3];
+    if (a <= 0.003 || r <= 0.2) continue;
+    ctx.globalAlpha = prevA * clamp(a);
+    ctx.drawImage(spr, items[i] - r, items[i + 1] - r, r * 2, r * 2);
+  }
+  ctx.globalAlpha = prevA;
+  ctx.globalCompositeOperation = prevOp;
+}
+
 /** Heller Kern + Hof – für Partikel/Moleküle */
 export function spark(ctx, x, y, r, color, a = 1) {
   glow(ctx, x, y, r * 4, color, a * 0.55);
@@ -286,6 +306,7 @@ export function pointAt(pts, f) {
 export function subPath(pts, f0, f1) {
   f0 = clamp(f0); f1 = clamp(f1);
   if (f1 <= f0) return [];
+  if (f0 === 0 && f1 === 1) return pts.slice();          // häufigster Fall: ganzer Pfad
   const total = polyLength(pts);
   const L0 = total * f0, L1 = total * f1;
   const out = [];
@@ -306,9 +327,20 @@ export function subPath(pts, f0, f1) {
   return out;
 }
 
+/** Geräte-Skalierung des aktuellen Transforms (für pixelgenaue Strichbreiten) */
+export function deviceScale(ctx) {
+  const m = ctx.getTransform();
+  return Math.sqrt(Math.abs(m.a * m.d - m.b * m.c)) || 1;
+}
+
 export function strokePath(ctx, pts, color, a = 1, w = 2, closed = false) {
   if (a <= 0.003 || pts.length < 2) return;
-  ctx.strokeStyle = rgba(color, a); ctx.lineWidth = w; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  // Dünne Striche (1–1,4 Geräte-px) als 1-px-Haarlinie mit gleicher „Tintenmenge“:
+  // optisch gleich, im Software-Renderer aber ~3× schneller.
+  const wd = w * deviceScale(ctx);
+  if (wd > 1 && wd <= 1.4 && a * wd <= 1) { ctx.strokeStyle = rgba(color, a * wd); ctx.lineWidth = 0.999 * w / wd; }
+  else { ctx.strokeStyle = rgba(color, a); ctx.lineWidth = w; }
+  ctx.lineCap = 'round'; ctx.lineJoin = 'round';
   ctx.beginPath(); ctx.moveTo(pts[0].x, pts[0].y);
   for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i].x, pts[i].y);
   if (closed) ctx.closePath();
@@ -389,16 +421,35 @@ export const FONT = {
  *       base('middle'|'alphabetic'|'top'), spacing(px), font('display'|'text'),
  *       reveal(0..1) – zeichenweises Einblenden mit leichter Aufwärtsbewegung,
  *       glow(0..1) – leichtes Leuchten
+ * Rückgabe: Textbreite (px)
  */
+const _glyphCache = new Map();
+/** x-Versätze aller Zeichen aus Präfix-Messungen (inkl. Kerning) → Einblenden ohne Sprung am Ende. */
+function glyphOffsets(ctx, chars, key) {
+  let a = _glyphCache.get(key);
+  if (a) return a;
+  a = new Float32Array(chars.length + 1);
+  let acc = '';
+  for (let i = 0; i < chars.length; i++) { acc += chars[i]; a[i + 1] = ctx.measureText(acc).width; }
+  // erst cachen, wenn alle Schriften geladen sind (sonst würden Maße der Ersatzschrift gespeichert)
+  if (typeof document === 'undefined' || document.fonts.status === 'loaded') {
+    if (_glyphCache.size > 1500) _glyphCache.clear();
+    _glyphCache.set(key, a);
+  }
+  return a;
+}
+
 export function text(ctx, str, x, y, o = {}) {
   const size = o.size ?? 40, weight = o.weight ?? 600, color = o.color ?? C.text;
   const alpha = o.alpha ?? 1, align = o.align ?? 'center', base = o.base ?? 'middle';
   const reveal = o.reveal ?? 1, spacing = o.spacing ?? 0;
   if (alpha <= 0.003 || reveal <= 0) return 0;
   ctx.save();
-  ctx.font = `${weight} ${size}px ${o.font === 'text' ? FONT.text : FONT.display}`;
+  const font = `${weight} ${size}px ${o.font === 'text' ? FONT.text : FONT.display}`;
+  ctx.font = font;
   ctx.textBaseline = base;
-  if ('letterSpacing' in ctx) ctx.letterSpacing = `${spacing}px`;
+  const hasLS = 'letterSpacing' in ctx;
+  if (hasLS) ctx.letterSpacing = `${spacing}px`;
   const width = ctx.measureText(str).width;
   let x0 = x;
   if (align === 'center') x0 = x - width / 2;
@@ -412,23 +463,43 @@ export function text(ctx, str, x, y, o = {}) {
     ctx.fillStyle = rgba(color, alpha);
     ctx.fillText(str, x0, y);
   } else {
-    // zeichenweise: jedes Zeichen blendet mit kleinem Versatz ein
-    const n = str.length;
-    let cx = x0;
-    for (let i = 0; i < n; i++) {
-      const ch = str[i];
-      const w = ctx.measureText(ch).width + ('letterSpacing' in ctx ? 0 : spacing);
-      const k = clamp(reveal * (n + 6) / 6 - i / 6);
-      if (k > 0) {
-        const kk = ease.out(k);
-        ctx.fillStyle = rgba(color, alpha * kk);
-        ctx.fillText(ch, cx, y + (1 - kk) * size * 0.35);
-      }
-      cx += w;
+    // zeichenweise: jedes Zeichen blendet weich ein und setzt sich mit sanfter Aufwärtsbewegung
+    const chars = Array.from(str);
+    const n = chars.length, span = 6;
+    const off = hasLS ? glyphOffsets(ctx, chars, `${font}|${spacing}|${str}`) : null;
+    const px = (i) => (off ? off[i] : i === 0 ? 0 : ctx.measureText(chars.slice(0, i).join('')).width + spacing * i);
+    // bereits vollständig sichtbare Zeichen in einem Zug zeichnen (identische Glyphenlage wie am Ende)
+    let done = 0;
+    while (done < n && reveal * (n + span) / span - done / span >= 1) done++;
+    if (done > 0) {
+      ctx.fillStyle = rgba(color, alpha);
+      ctx.fillText(done === n ? str : chars.slice(0, done).join(''), x0, y);
+    }
+    for (let i = done; i < n; i++) {
+      const k = clamp(reveal * (n + span) / span - i / span);
+      if (k <= 0) break;
+      const ka = k * k * (3 - 2 * k);
+      const km = 1 - Math.pow(1 - k, 4);
+      ctx.fillStyle = rgba(color, alpha * ka);
+      ctx.fillText(chars[i], x0 + px(i), y + (1 - km) * size * 0.3);
     }
   }
   ctx.restore();
   return width;
+}
+
+const _capCache = new Map();
+/** Versalhöhe einer Schrift (für optisch exakt zentrierte Beschriftungen). */
+export function capHeight(ctx, size, weight = 600, font = 'text') {
+  const key = `${weight}|${size}|${font}`;
+  let v = _capCache.get(key);
+  if (v) return v;
+  ctx.save();
+  ctx.font = `${weight} ${size}px ${font === 'text' ? FONT.text : FONT.display}`;
+  v = ctx.measureText('H').actualBoundingBoxAscent || size * 0.727;
+  ctx.restore();
+  if (typeof document === 'undefined' || document.fonts.status === 'loaded') _capCache.set(key, v);
+  return v;
 }
 
 export function measure(ctx, str, size, weight = 600, font = 'display', spacing = 0) {
@@ -450,22 +521,29 @@ export function callout(ctx, ax, ay, tx, ty, str, o = {}) {
   const pts = [{ x: ax, y: ay }, { x: mx, y: ty }, { x: tx, y: ty }];
   strokePath(ctx, subPath(pts, 0, ease.out(k1)), lineColor, a * 0.7, o.lw ?? 1.5);
   dot(ctx, ax, ay, 3.2, lineColor, a * k1);
+  ring(ctx, ax, ay, 3.2 + 4.5 * ease.out(k1), lineColor, a * k1 * 0.3, 1.2);
   text(ctx, str, tx + (tx > ax ? 12 : -12), ty, { size: o.size ?? 28, weight: o.weight ?? 600, color, alpha: a, align: tx > ax ? 'left' : 'right', reveal: k2, font: o.font });
 }
 
-/** Kleines Etikett (z. B. „Hypothese“) mit Rahmen */
+/** Kleines Etikett (z. B. „Hypothese“) mit Rahmen – optisch exakt zentriert, sanftes Erscheinen */
 export function badge(ctx, str, x, y, o = {}) {
-  const size = o.size ?? 22, color = o.color ?? C.warn, a = (o.alpha ?? 1) * (o.p ?? 1);
+  const size = o.size ?? 22, color = o.color ?? C.warn, p = clamp(o.p ?? 1), a = (o.alpha ?? 1) * p;
   if (a <= 0.003) return;
-  const w = measure(ctx, str, size, 600, 'text', 1.2) + size * 1.4;
-  const h = size * 1.7;
+  const sp = 0.9;
+  const tw = measure(ctx, str, size, 600, 'text', sp) - sp;   // ohne Laufweite nach dem letzten Zeichen
+  const padX = size * 0.8;
+  const w = tw + padX * 2;
+  const h = size * 1.72;
   const x0 = (o.align === 'left' ? x : o.align === 'right' ? x - w : x - w / 2);
+  const k = ease.out(p), sc = 0.94 + 0.06 * k;
   ctx.save();
-  ctx.strokeStyle = rgba(color, a * 0.8); ctx.lineWidth = 1.5;
-  ctx.fillStyle = rgba(color, a * 0.08);
-  roundRect(ctx, x0, y - h / 2, w, h, h / 2); ctx.fill(); ctx.stroke();
+  if (sc < 0.999) { const cx = x0 + w / 2; ctx.translate(cx, y); ctx.scale(sc, sc); ctx.translate(-cx, -y); }
+  ctx.fillStyle = rgba(color, a * 0.1);
+  roundRect(ctx, x0, y - h / 2, w, h, h / 2); ctx.fill();
+  ctx.strokeStyle = rgba(color, a * 0.72); ctx.lineWidth = 1.3;
+  roundRect(ctx, x0 + 0.5, y - h / 2 + 0.5, w - 1, h - 1, h / 2 - 0.5); ctx.stroke();
+  text(ctx, str, x0 + padX, y + capHeight(ctx, size, 600, 'text') / 2, { size, weight: 600, color, alpha: a, font: 'text', spacing: sp, align: 'left', base: 'alphabetic' });
   ctx.restore();
-  text(ctx, str, x0 + w / 2, y + 1, { size, weight: 600, color, alpha: a, font: 'text', spacing: 1.2 });
 }
 
 export function roundRect(ctx, x, y, w, h, r) {
@@ -668,6 +746,24 @@ export function brainGyri() {
   return lines;
 }
 
+// Kleinhirn-Falten (statisch, einmal berechnet)
+let _cbFolds = null;
+function cerebellumFolds() {
+  if (_cbFolds) return _cbFolds;
+  _cbFolds = [];
+  for (let i = 0; i < 6; i++) {
+    const yy = 200 + i * 22;
+    const pts = [];
+    for (let k = 0; k <= 16; k++) {
+      const xx = 200 + k * 16;
+      const p = { x: xx, y: yy + Math.sin(k * 0.8 + i) * 4 + (xx - 330) * (xx - 330) * 0.0006 * (i - 2) };
+      if (pointInPoly(p, cerebellumOutline)) pts.push(p);
+    }
+    _cbFolds.push(pts);
+  }
+  return _cbFolds;
+}
+
 /**
  * Zeichnet das stilisierte Gehirn (Seitenansicht) im aktuellen Koordinatensystem.
  * o: alpha, draw (0..1 Kontur zeichnen), fill, gyri(0..1), color, cerebellum
@@ -690,19 +786,10 @@ export function drawBrain(ctx, o = {}) {
   const gy = o.gyri ?? 1;
   if (gy > 0) {
     for (const l of brainGyri()) {
-      strokePath(ctx, subPath(l.pts, 0, d), color, a * gy * (l.major ? 0.5 : 0.22), l.w);
+      strokePath(ctx, d >= 1 ? l.pts : subPath(l.pts, 0, d), color, a * gy * (l.major ? 0.5 : 0.22), l.w);
     }
     if (o.cerebellum !== false) {
-      for (let i = 0; i < 6; i++) {
-        const yy = 200 + i * 22;
-        const pts = [];
-        for (let k = 0; k <= 16; k++) {
-          const xx = 200 + k * 16;
-          const p = { x: xx, y: yy + Math.sin(k * 0.8 + i) * 4 + (xx - 330) * (xx - 330) * 0.0006 * (i - 2) };
-          if (pointInPoly(p, cerebellumOutline)) pts.push(p);
-        }
-        strokePath(ctx, pts, color, a * gy * 0.22, 1.4);
-      }
+      for (const pts of cerebellumFolds()) strokePath(ctx, pts, color, a * gy * 0.22, 1.4);
     }
   }
   glowPath(ctx, subPath(brainOutline, 0, d), color, a * 0.85, o.lw ?? 2.4, 10);
