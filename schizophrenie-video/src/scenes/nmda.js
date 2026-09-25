@@ -41,8 +41,8 @@ export default {
     ctx.translate(RX, MY); ctx.scale(sc, sc); ctx.translate(-RX, -MY);
     const RA = A * (1 - smoothstep(0.6, 1, zoomOut) * 0.2);
     drawMembrane(ctx, -400, W + 400, MY, { alpha: RA, t, gaps: [{ x: RX, w: 250 }], spacing: 16, thick: 40 });
-    text(ctx, 'außen', 150, 380, { size: 26, weight: 600, color: C.textDim, font: 'text', alpha: A * (1 - zoomOut) });
-    text(ctx, 'innen (Nervenzelle)', 190, 820, { size: 26, weight: 600, color: C.textDim, font: 'text', alpha: A * (1 - zoomOut) });
+    text(ctx, 'außen', 190, 380, { size: 26, weight: 600, color: C.textDim, font: 'text', align: 'left', alpha: A * (1 - zoomOut) });
+    text(ctx, 'innen (Nervenzelle)', 190, 820, { size: 26, weight: 600, color: C.textDim, font: 'text', align: 'left', alpha: A * (1 - zoomOut) });
     // Rezeptor-Untereinheiten
     const asm = S.on('big', 1.6, ease.out);
     const gluB = S.on('two', 1.4, ease.inOut, 0.3), glyB = S.on('gly', 1.4, ease.inOut, 0.3);
@@ -122,7 +122,7 @@ export default {
     // Abgeschwächtes Signal
     const wl = S.win('weak', 'inh', 0.8, 0.8);
     if (wl > 0) {
-      const bx = 1540, by = 820;
+      const bx = 1500, by = 480;
       text(ctx, 'NMDA-Signal', bx, by - 190, { size: 26, weight: 600, color: C.text, font: 'text', alpha: wl });
       for (const [i, v, col] of [[0, 1, '#6fb0ff'], [1, 0.45, C.warn]]) {
         const h = 150 * (i === 1 ? lerp(1, v, S.on('weak', 1.5)) : v);
