@@ -1,0 +1,214 @@
+# ===================================================================
+#  SPRECHERTEXT – „Die Entstehung von Schizophrenie bei Kindern und Jugendlichen“
+#
+#  Format
+#    === <scene-id> | <Titel> | lead=<s> | tail=<s>
+#        lead  = Sekunden Bild vor dem ersten Satz der Szene
+#        tail  = Mindestpause nach dem letzten Satz der Szene
+#    Jede weitere Zeile = ein Satz bzw. eine Sprecheinheit.
+#    {cue}      markiert das folgende Wort als visuellen Beat (Animation reagiert exakt darauf).
+#    || pause=  Pause nach der Zeile in Sekunden (Standard 0.45 s)
+#    Zeilen mit # sind Kommentare.
+#
+#  Aussprache (NMDA, C4, 22q11.2 …): data/lexicon.de.json
+#  Faktencheck und Quellen: docs/recherche-faktencheck.md
+# ===================================================================
+
+=== intro | Prolog | lead=7.5 | tail=1.2
+{neuron}Eine einzelne Nervenzelle. {branch}Dann Verbindungen – {network}Tausende, Millionen, Milliarden. || pause=0.7
+{brain}Aus ihnen entsteht das komplexeste Organ, das wir kennen: {brain2}das menschliche Gehirn. || pause=1.0
+{question}Wie entsteht Schizophrenie? || pause=1.3
+Die überraschende Antwort lautet: {notone}nicht durch eine einzige Ursache. || pause=0.9
+{together}Sondern durch ein Zusammenspiel: {p0}Genetik, {p1}Entwicklung, {p2}Umwelt, {p3}Immunsystem, {p4}Synapsen {p5}und Botenstoffe im Gehirn. || pause=0.7
+{alone}Keiner dieser Wege erklärt die Erkrankung allein. {merge}Erst gemeinsam ergeben sie ein Bild. || pause=1.0
+{title}Dieses Video zeigt, wie sich das Gehirn entwickelt, was diese Entwicklung beeinflussen kann – {youth}und warum gerade die Jugend eine besondere Rolle spielt. || pause=1.2
+
+=== whatis | Was ist Schizophrenie? | lead=1.2 | tail=0.8
+Zuerst: {what}Was ist Schizophrenie eigentlich? || pause=0.8
+Eine psychische Erkrankung, bei der sich {perc}Wahrnehmung, {think}Denken, {feel}Gefühle {drive}und Antrieb verändern können.
+Betroffene hören zum Beispiel {voices}Stimmen, die andere nicht hören, {belief}oder sind von Dingen überzeugt, die für andere nicht nachvollziehbar sind.
+{myth}Mit einer „gespaltenen Persönlichkeit“ hat das übrigens nichts zu tun. || pause=0.7
+{prev}Im Laufe des Lebens erkranken etwa vier bis sieben von tausend Menschen. {onset}Meist beginnt die Erkrankung im späten Jugend- oder frühen Erwachsenenalter.
+{early}Etwa jede zehnte Erkrankung beginnt vor dem 18. Lebensjahr. {child}Vor dem 13. Lebensjahr ist sie sehr selten. || pause=0.8
+{why}Warum zeigen sich die ersten deutlichen Symptome oft genau dann, wenn aus Jugendlichen Erwachsene werden? || pause=0.9
+Um das zu verstehen, müssen wir viel früher beginnen – {dev}bei der Entwicklung des Gehirns.
+
+=== neurodev | Ein Entwicklungsmodell | lead=1.0 | tail=0.8
+Die Forschung versteht Schizophrenie heute als {ndd}neuroentwicklungsbezogene Erkrankung. {roots}Ihre Wurzeln können bis in die Zeit vor der Geburt zurückreichen. || pause=0.6
+{prenatal}Vor der Geburt entstehen Nervenzellen und wandern an ihren Platz. {childhood}In der Kindheit bilden sich enorm viele Verbindungen. {adol}In der Jugend wird das Netzwerk umgebaut und verfeinert.
+{window}Und genau am Ende dieses Umbaus – zwischen etwa fünfzehn und dreißig Jahren – beginnt Schizophrenie am häufigsten. || pause=0.7
+Das Modell sagt also nicht: {wrong}Ein Fehler passiert, und dann ist man krank. || pause=0.5
+{model}Es sagt: Frühe Einflüsse können die Entwicklung verändern – {later}und ob daraus später Symptome entstehen, hängt davon ab, was in den folgenden Jahren geschieht. || pause=0.9
+
+=== development | Kindheit bis Adoleszenz | lead=1.2 | tail=0.8
+{child}Im Gehirn eines kleinen Kindes entstehen in rasantem Tempo neue Verbindungen zwischen Nervenzellen – {syn}die Synapsen. {peak}In der Kindheit liegt ihre Dichte deutlich über der eines Erwachsenen.
+{teen}Im Jugendalter wird das Netzwerk strukturierter: {strong}Häufig genutzte Verbindungen werden verstärkt, {weak}selten genutzte abgebaut.
+{adult}Übrig bleibt ein effizienteres Netzwerk: {fewer}weniger Verbindungen, {better}aber besser organisiert. || pause=0.7
+{axon}Gleichzeitig werden die langen Leitungen der Nervenzellen, die Axone, {myelin}nach und nach von Myelin umhüllt – {myelin2}einer fettreichen Isolierschicht, {speed}die Signale schneller und zuverlässiger macht.
+{late}Im präfrontalen Kortex, zuständig für Planung, {wm}Arbeitsgedächtnis {self}und Selbststeuerung, dauert diese Reifung bis etwa Mitte zwanzig. || pause=0.6
+{plastic}Das Gehirn ist in Kindheit und Jugend also hochgradig formbar. {strength}Das ist eine große Stärke. {sens}Es bedeutet aber auch: Einflüsse können sich in dieser Zeit besonders stark auswirken. || pause=1.0
+
+=== riskmap | Ein Netz aus Einflüssen | lead=0.8 | tail=0.8
+{which}Welche Einflüsse sind das? || pause=0.8
+{core}Im Zentrum steht oft eine genetische Vulnerabilität – {core2}also eine erblich mitbedingte Verletzlichkeit.
+{prenat}Dazu kommen Einflüsse vor und während der Geburt, {stress}Stress, {trauma}belastende Erfahrungen, {social}soziale Faktoren, {subst}Substanzen wie Cannabis {imm}und Prozesse des Immunsystems.
+{notall}Nicht jeder Faktor ist bei jeder Person vorhanden. {small}Und jeder einzelne erhöht das Risiko meist nur ein Stück. || pause=0.6
+{double}Selbst ein verdoppeltes Risiko heißt bei einem Grundrisiko von unter einem Prozent: {most}Die allermeisten erkranken nicht. || pause=0.6
+{web}Es ist kein Rezept. {web2}Es ist ein Netz aus Wahrscheinlichkeiten. || pause=1.0
+
+=== genetics | Genetik | lead=1.0 | tail=0.8
+{dna}Beginnen wir mit der Genetik. {twins}Zwillings- und Familienstudien zeigen: Erbliche Faktoren erklären einen großen Teil der Unterschiede im Erkrankungsrisiko.
+{but}Aber: {twin2}Erkrankt ein eineiiger Zwilling, bleibt der andere in mehr als der Hälfte der Fälle gesund – {same}obwohl beide nahezu identische Gene haben. || pause=0.6
+{notfate}Gene allein entscheiden also nicht. || pause=0.7
+{poly}Schizophrenie ist stark polygen. || pause=0.4
+{notone}Es gibt kein einzelnes Schizophrenie-Gen, {many}sondern sehr viele genetische Varianten, {tiny}die jeweils nur einen winzigen Beitrag leisten.
+{gwas}Eine internationale Studie mit Daten von über 76.000 Betroffenen {loci}fand 287 Regionen im Erbgut, die statistisch mit Schizophrenie zusammenhängen.
+{common}Die meisten dieser Varianten sind häufig – {everyone}fast jeder Mensch trägt einige davon. {sum}Erst viele zusammen erhöhen die Anfälligkeit etwas. || pause=0.7
+{rare}Daneben gibt es seltene Veränderungen mit stärkerem Effekt, {del}zum Beispiel die 22q11.2-Deletion – {del2}ein kleines fehlendes Stück auf Chromosom 22.
+{quarter}Etwa jeder vierte Mensch mit dieser Deletion entwickelt eine Psychose. {three}Drei von vier aber nicht. {notneeded}Und die allermeisten Betroffenen mit Schizophrenie haben sie nicht. || pause=0.6
+{prob}Gene verändern also Wahrscheinlichkeiten. {nofix}Sie legen nichts endgültig fest. || pause=1.0
+
+=== prenatal | Vor und während der Geburt | lead=1.0 | tail=0.8
+{womb}Gehen wir zurück in die Zeit vor der Geburt.
+{neurogen}Im Gehirn des Kindes entstehen Nervenzellen in enormer Zahl. {migrate}Sie wandern an ihren späteren Platz, {processes}bilden Fortsätze {synform}und knüpfen erste Verbindungen. {fine}Ein fein abgestimmter Prozess. || pause=0.6
+Untersucht werden unter anderem {infect}Infektionen in der Schwangerschaft, {immune}eine Aktivierung des mütterlichen Immunsystems, {nutrition}Mangelernährung, {mstress}starker Stress {smoke}und Rauchen.
+{birth}Auch Komplikationen rund um die Geburt, {hypoxia}etwa Sauerstoffmangel {preterm}oder eine Frühgeburt, sind mit einem leicht erhöhten Risiko verbunden. || pause=0.6
+{target}Wichtig ist, worauf diese Faktoren zeigen: {notdirect}nicht direkt auf Schizophrenie, {target2}sondern auf mögliche Veränderungen der neurobiologischen Entwicklung. || pause=0.6
+{partial}Zusammen erklären sie nur einen Teil des Risikos. {most}Die allermeisten Kinder, die solchen Einflüssen ausgesetzt waren, entwickeln keine Schizophrenie. || pause=1.0
+
+=== adolescence | Der große Umbau | lead=1.2 | tail=0.8
+{jump}Springen wir viele Jahre nach vorn. || pause=0.8
+{adol}Dann kommt die Adoleszenz. || pause=0.8
+{puberty}Mit der Pubertät verändert sich nicht nur der Körper. {rebuild}Auch das Gehirn erlebt eine seiner größten Umbauphasen.
+{sort}Synapsen werden neu sortiert. {myelin}Myelin nimmt zu. {eff}Netzwerke werden effizienter. || pause=0.7
+{big}Das Gehirn wird nicht einfach größer. || pause=0.7
+{boom}Es wird umgebaut. || pause=1.5
+{grey}In Hirnscans sieht man, wie die graue Substanz der Hirnrinde dünner wird, {white}während die weiße Substanz, die isolierten Leitungsbahnen, zunimmt.
+{normal}Ein ganz normaler Reifungsprozess. {q}Aber was passiert dabei an den Synapsen? || pause=1.0
+
+=== pruning | Synaptisches Pruning | lead=1.0 | tail=0.8
+{zoom}Zoomen wir hinein. || pause=1.0
+{clean}Das Gehirn räumt auf. || pause=0.9
+{term}Man nennt das synaptisches Pruning, || pause=0.5
+{def}also den gezielten Umbau beziehungsweise die Entfernung bestimmter synaptischer Verbindungen. || pause=0.6
+{kid}In der Kindheit gibt es mehr Verbindungen, als später gebraucht werden. {activity}In der Adoleszenz entscheidet vor allem die Aktivität: {stabilize}Genutzte Verbindungen werden stabilisiert. {fade}Andere verlieren an Aktivität {tagged}und werden markiert. || pause=0.6
+{mg}Dann kommt eine besondere Zelle ins Spiel: {mg2}die Mikroglia. {engulf}Sie kann markierte Synapsen aufnehmen und abbauen. || pause=0.7
+{normalp}Pruning ist ein normaler, wichtiger Teil der Gehirnentwicklung. || pause=0.5
+{research}Bei Schizophrenie wird untersucht, ob dieser Prozess bei manchen Menschen verändert reguliert ist – {hyp}etwa, ob in bestimmten Regionen mehr Verbindungen abgebaut werden als üblich.
+{spines}Dazu passt: Im präfrontalen Kortex von Betroffenen fand man im Durchschnitt weniger dendritische Dornen, {spines2}also Kontaktstellen für Synapsen.
+{caution}Doch das ist ein Forschungsmodell. {open}Ob verändertes Pruning Ursache, Folge oder nur ein Teil des Geschehens ist, ist noch nicht geklärt. || pause=1.0
+
+=== microglia | Mikroglia | lead=1.0 | tail=0.8
+{immune}Mikroglia sind die Immunzellen des Gehirns. {survey}Mit beweglichen, verzweigten Fortsätzen tasten sie ständig ihre Umgebung ab. {debris}Sie beseitigen Zelltrümmer {synreg}und können an der Regulation von Synapsen beteiligt sein. || pause=0.6
+{how}Doch woher weiß eine Mikroglia-Zelle, welche Synapse sie entfernen soll? || pause=0.9
+{compl}Ein möglicher Mechanismus ist das Komplement-System – {compl2}ein Teil des Immunsystems, das eigentlich Krankheitserreger markiert.
+{c1q}Die Eiweiße C1q {c3}und C3 können sich an schwache Synapsen heften – {flag}wie kleine Markierungsfähnchen.
+{receptor}Mikroglia erkennen diese Markierung über passende Rezeptoren {eat}und nehmen die Synapse auf. || pause=1.0
+
+=== complement | Komplement und C4 | lead=1.0 | tail=0.8
+{circle}Hier schließt sich ein Kreis zur Genetik. {mhc}Eines der stärksten genetischen Signale für Schizophrenie liegt in einer Region voller Immungene.
+{c4}Dort liegt auch das Gen für C4, {c4b}einen weiteren Baustein des Komplement-Systems. {variants}Es gibt Varianten, {expr}die unterschiedlich viel davon bilden.
+{study}Eine Studie aus dem Jahr 2016 zeigte: {more}Varianten mit mehr C4A sind mit einem etwas höheren Risiko verbunden. || pause=0.6
+{chain}Daraus entstand ein Modell: {ch1}genetische Variation, {ch2}mehr Komplement-Signal, {ch3}mehr markierte Synapsen, {ch4}mehr Aufnahme durch Mikroglia, {ch5}mehr synaptische Entfernung. || pause=0.7
+{mice}Versuche an Mäusen und an Zellen von Betroffenen passen dazu. {villain}Aber C4 ist kein Bösewicht – {vital}das Komplement-System ist lebenswichtig. {open}Und vieles an diesem Modell ist noch nicht vollständig geklärt. || pause=1.0
+
+=== glutamate | Glutamat | lead=1.0 | tail=0.8
+{into}Werfen wir einen Blick in eine einzelne Synapse. || pause=0.5
+{vesicles}Im Endknöpfchen der sendenden Zelle liegen kleine Bläschen, die Vesikel. {glu}Sie enthalten Glutamat – {main}den wichtigsten erregenden Botenstoff des Gehirns. || pause=0.6
+{ap}Kommt ein elektrisches Signal an, {fuse}verschmelzen die Vesikel mit der Membran {release}und setzen Glutamat frei.
+{cleft}Die Moleküle wandern durch den synaptischen Spalt {bind}und binden an Rezeptoren: {ampa}an schnelle AMPA-Rezeptoren {nmda}und an NMDA-Rezeptoren. || pause=0.7
+{astro}Danach nehmen Astrozyten, sternförmige Nachbarzellen, das Glutamat auf {convert}und wandeln es in Glutamin um. {back}Glutamin wandert zurück zur Nervenzelle {reconv}und wird wieder zu Glutamat.
+{cycle}Dieser Glutamat-Glutamin-Zyklus recycelt den Botenstoff {balance}und hilft, die Erregung im Gleichgewicht zu halten. || pause=1.0
+
+=== nmda | Die NMDA-Hypothese | lead=1.0 | tail=0.8
+{big}Nun zum NMDA-Rezeptor, {gate}einem Ionenkanal mit einer Besonderheit. || pause=0.5
+{two}Er öffnet sich nur, wenn Glutamat {gly}und zusätzlich Glycin oder D-Serin gebunden sind – {mg}und wenn ein Magnesium-Ion den Kanal freigibt, weil die Zelle bereits erregt ist.
+{ca}Dann strömt Calcium ein. {learn}Dieses Signal ist wichtig für Lernen, Gedächtnis und stabile Synapsen. || pause=0.7
+{ket}Substanzen, die NMDA-Rezeptoren blockieren, wie Ketamin, {psy}können bei Gesunden vorübergehend psychoseähnliche Zustände auslösen. {enc}Und bei einer seltenen Autoimmunerkrankung gegen NMDA-Rezeptoren {enc2}treten häufig psychotische Symptome auf. || pause=0.6
+{hyp}Daraus entstand eine wichtige Hypothese: {weak}Eine abgeschwächte NMDA-vermittelte Signalübertragung könnte beteiligt sein – {inh}besonders an hemmenden Nervenzellen. || pause=0.6
+{caveat}Das heißt nicht, dass ein NMDA-Mangel Schizophrenie verursacht. {piece}Es ist ein Baustein, der erklären könnte, warum Netzwerke aus dem Takt geraten. || pause=1.0
+
+=== gaba | GABA und Netzwerkrhythmen | lead=1.0 | tail=0.8
+{inter}Diese hemmenden Zellen heißen Interneurone. {gaba}Ihr Botenstoff ist GABA, {gaba2}der wichtigste hemmende Botenstoff des Gehirns.
+{clock}Sie wirken wie Taktgeber: {brake}Sie bremsen viele erregende Nervenzellen gleichzeitig {sync}und bringen sie so in einen gemeinsamen Rhythmus. {gamma}So entstehen schnelle Hirnwellen, {gamma2}Gamma-Oszillationen, {wm}wichtig für Aufmerksamkeit und Arbeitsgedächtnis. || pause=0.6
+{link}Jetzt wird die Verbindung sichtbar: {n1}Sind die NMDA-Signale an diesen Interneuronen abgeschwächt, {n2}hemmen sie weniger zuverlässig. {n3}Das Netzwerk verliert seinen Takt. || pause=0.7
+{pm}Tatsächlich fand man bei Schizophrenie Veränderungen in solchen Interneuronen {gred}und oft eine veränderte Gamma-Aktivität.
+{ei}Glutamat und GABA bilden zusammen das Gleichgewicht von Erregung und Hemmung. {ei2}Gerät es aus der Balance, kann die Informationsverarbeitung leiden. || pause=1.0
+
+=== dopamine | Dopamin | lead=1.0 | tail=0.8
+{out}Zoomen wir hinaus, {whole}auf das ganze Gehirn. {da}Hier kommt Dopamin ins Spiel. || pause=0.6
+{mid}Dopamin wird in kleinen Kerngebieten im Mittelhirn gebildet {paths}und über verschiedene Bahnen verteilt – {str}etwa ins Striatum {pfc}und in den präfrontalen Kortex.
+{sal}Dopamin hilft zu bewerten, was wichtig ist {sal2}und Aufmerksamkeit verdient. || pause=0.5
+{rel}Für psychotische Symptome ist Dopamin besonders relevant. {pet}Bildgebende Studien zeigen bei vielen Betroffenen eine erhöhte Dopamin-Bildung und -Freisetzung im Striatum.
+{idea}Eine Erklärungsidee: {ab}Wird Dopamin zur falschen Zeit freigesetzt, können unbedeutende Dinge plötzlich übermäßig wichtig erscheinen – {ab2}ein möglicher Weg zu Wahnideen. || pause=0.6
+{meds}Antipsychotika wirken vor allem an Dopamin-Rezeptoren und helfen besonders gegen Wahn und Halluzinationen. || pause=0.5
+{notiso}Aber auch das Dopaminsystem arbeitet nicht isoliert: {hippo}Veränderte Glutamat-Aktivität, etwa im Hippocampus, kann die Dopaminfreisetzung beeinflussen. || pause=0.5
+{triad}Glutamat, GABA und Dopamin {triad2}hängen eng zusammen. || pause=1.0
+
+=== synthesis | Ein zusammenhängendes System | lead=1.0 | tail=0.8
+{all}Setzen wir die Bausteine zusammen. || pause=0.7
+{s1}Genetische Varianten {s2}beeinflussen die Entwicklung des Gehirns. {s3}In der Jugend wird das Netzwerk durch Pruning umgebaut, {s4}an dem Mikroglia beteiligt sein können.
+{s5}Veränderte Glutamat- und NMDA-Signale {s6}wirken auf GABA-Interneurone, {s7}die Regulation von Dopamin verändert sich {s8}– und damit die Aktivität ganzer Netzwerke. || pause=0.7
+{system}Was wie einzelne Bausteine aussieht, ist in Wirklichkeit ein zusammenhängendes System. || pause=0.6
+{simpl}Ein vereinfachtes Modell aus mehreren Hypothesen – {indiv}bei verschiedenen Menschen können unterschiedliche Teile eine Rolle spielen. || pause=1.0
+
+=== stress | Stress | lead=1.2 | tail=0.8
+{leave}Verlassen wir das Gehirn {person}und schauen auf den Menschen. || pause=0.6
+{teen}Jugendliche erleben viele Veränderungen. {load}Manchmal kommen Belastungen hinzu: {sleep}Schlafmangel, {bully}Mobbing, {excl}Ausgrenzung {chronic}oder chronischer Stress.
+{trauma}Auch belastende Erfahrungen in der Kindheit {trauma2}sind mit einem erhöhten Psychoserisiko verbunden. {city}Ebenso das Aufwachsen in Großstädten {migr}oder Erfahrungen von Migration und Diskriminierung – {social}vermutlich, weil damit oft sozialer Stress einhergeht. || pause=0.6
+{axis}Bei Stress aktiviert das Gehirn die Stressachse: {h1}vom Hypothalamus {h2}über die Hirnanhangsdrüse {h3}bis zu den Nebennieren. {cort}Sie schütten Cortisol aus.
+{acute}Kurzfristig ist das hilfreich. {long}Hält Stress lange an, {plast}kann er Systeme beeinflussen, die an Stressregulation und neuronaler Plastizität beteiligt sind – {dasens}möglicherweise auch das Dopaminsystem.
+{nocause}Stress allein verursacht keine Schizophrenie. {shift}Aber bei vorhandener Verletzlichkeit kann er das Gleichgewicht verschieben. || pause=1.0
+
+=== cannabis | Cannabis | lead=1.0 | tail=0.8
+{can}Ein Faktor, der bei Jugendlichen häufig diskutiert wird, ist Cannabis. || pause=0.6
+{ecs}Unser Körper besitzt ein eigenes Endocannabinoid-System, {fine}eine Art Feinsteuerung für Synapsen. {thc}Der Wirkstoff THC {cb1}bindet an dieselben CB1-Rezeptoren. {flood}Doch er wirkt nicht gezielt und kurz, sondern überall und länger anhaltend.
+{devq}Weil sich dieses System in der Jugend noch entwickelt, {devq2}wird untersucht, ob häufiger Konsum die Reifung von Netzwerken beeinflussen kann. || pause=0.6
+{assoc}Cannabiskonsum ist mit einem erhöhten Psychoserisiko verbunden, {early}besonders bei frühem Beginn, {freq}häufigem Konsum {pot}und hoher THC-Potenz.
+{study}In einer großen europäischen Studie war täglicher Konsum von hochpotentem Cannabis mit einem etwa fünffach erhöhten Psychoserisiko verbunden. || pause=0.6
+{vuln}Besonders relevant kann das bei vorhandener Vulnerabilität sein. {most}Gleichzeitig gilt: Die meisten, die Cannabis konsumieren, entwickeln keine Psychose. {debate}Wie groß der ursächliche Anteil ist, wird weiter erforscht. || pause=1.0
+
+=== model | Vulnerabilität und Belastung | lead=1.0 | tail=0.8
+{fit}Wie passt das zusammen? {vsm}Ein hilfreiches Bild ist das Vulnerabilitäts-Stress-Modell. || pause=0.6
+{left}Auf der einen Seite: biologische Vulnerabilität – {l1}Genetik, {l2}frühe Entwicklung, {l3}neuronale Reifung. {right}Auf der anderen: Belastungen – {r1}Stress, {r2}Cannabis, {r3}Umwelt {r4}und weitere Faktoren. || pause=0.5
+{stable}Werden Belastungen gut abgefedert, bleibt das System stabil. {tip}Kommen aber mehrere Faktoren zusammen, kann eine Schwelle überschritten werden. || pause=0.6
+{protect}Es gibt auch Gegengewichte: {p1}stabile Beziehungen, {p2}ausreichend Schlaf, {p3}Strategien gegen Stress {p4}und frühe Unterstützung. || pause=0.6
+{notone}Nicht ein einzelner Faktor entscheidet, {combo}sondern die Kombination vieler Faktoren über die Entwicklung hinweg. || pause=1.0
+
+=== lives | Drei Lebenswege | lead=1.0 | tail=0.8
+{three}Stellen wir uns drei Menschen vor. || pause=0.6
+{A}Person A trägt eine genetische Vulnerabilität, {A2}erlebt aber wenige Belastungen. {A3}Sie entwickelt keine Psychose. || pause=0.5
+{B}Person B hat eine mittlere Vulnerabilität {B2}und mehrere Belastungen. {B3}Ihr Risiko ist erhöht. || pause=0.5
+{C}Person C hat eine hohe Vulnerabilität {C2}und ebenfalls mehrere Belastungen. {C3}Ihr Risiko ist noch höher – {C4}doch auch bei ihr ist eine Erkrankung nicht sicher. || pause=0.8
+{big}Risiko ist keine Vorbestimmung. {big2}Es beschreibt Wahrscheinlichkeiten, keine Schicksale. || pause=1.2
+
+=== prodrome | Frühe Zeichen | lead=1.0 | tail=0.8
+{tl}Eine Psychose entwickelt sich meist nicht über Nacht. {t1}Auf eine normale Entwicklung {t2}können subtile Veränderungen folgen, {t3}dann eine mögliche Vorphase, das Prodrom, {t4}und schließlich eine erste psychotische Episode. || pause=0.6
+{signs}Mögliche Warnzeichen sind {w1}sozialer Rückzug, {w2}ein deutlicher Leistungsabfall, {w3}Schlafprobleme, {w4}Misstrauen {w5}oder ungewöhnliche Wahrnehmungen.
+{unspec}Aber diese Zeichen sind unspezifisch. {pub}Vieles davon kommt in der Pubertät häufig vor – {notmean}nicht jede Veränderung bedeutet Schizophrenie. || pause=0.6
+{chr}Selbst von Jugendlichen mit klinisch erhöhtem Risiko entwickelt in Studien nur etwa jede vierte Person innerhalb von drei Jahren eine Psychose. {maj}Drei von vier nicht.
+{help}Trotzdem lohnt es sich, Veränderungen ernst zu nehmen: Frühe Hilfe kann den Verlauf verbessern. || pause=1.0
+
+=== symptoms | Symptome | lead=1.0 | tail=0.8
+{split}Tritt eine Schizophrenie auf, lassen sich die Symptome in drei Bereiche gliedern. || pause=0.5
+{pos}Positivsymptome, also zusätzliche Erlebnisse: {pos1}Wahn, {pos2}Halluzinationen wie Stimmenhören {pos3}und desorganisiertes Denken.
+{neg}Negativsymptome, bei denen etwas verloren geht: {neg1}sozialer Rückzug, {neg2}Antriebsminderung {neg3}und verminderter Gefühlsausdruck.
+{cog}Und kognitive Beeinträchtigungen: {cog1}Aufmerksamkeit, {cog2}Arbeitsgedächtnis {cog3}und Verarbeitungsgeschwindigkeit. || pause=0.6
+{before}Solche kognitiven Veränderungen zeigen sich oft schon Jahre vor der ersten Psychose – {link}ein weiterer Hinweis auf die Rolle der Entwicklung. || pause=1.0
+
+=== summary | Das große Bild | lead=1.2 | tail=0.8
+{back}Treten wir einen Schritt zurück. || pause=0.6
+{levels}Wir haben viele Ebenen gesehen: {L1}DNA, {L2}Gehirnentwicklung, {L3}Synapsen, {L4}Mikroglia, {L5}Glutamat, {L6}NMDA, {L7}GABA, {L8}Dopamin, {L9}Stress {L10}– und den Menschen selbst. || pause=0.6
+{connect}Sie alle sind miteinander verbunden. || pause=0.9
+{schizo}Schizophrenie ist eine komplexe neuroentwicklungsbezogene Erkrankung. || pause=0.8
+{n1}Nicht eine Ursache. || pause=0.35
+{n2}Nicht ein Gen. || pause=0.35
+{n3}Nicht ein Neurotransmitter. || pause=0.35
+{n4}Nicht ein einzelner Umweltfaktor. || pause=0.7
+{final}Sondern das Zusammenspiel vieler Faktoren über die Entwicklung hinweg. || pause=1.3
+
+=== conclusion | Ausblick | lead=1.0 | tail=10.0
+{good}Und zum Schluss das Wichtigste: {life}Das Gehirn entwickelt sich ein Leben lang. {adapt}Es bleibt veränderbar. || pause=0.6
+{treat}Schizophrenie ist behandelbar. {tr2}Mit Psychotherapie, Medikamenten und Unterstützung in Familie und Schule {tr3}können viele Betroffene ihre Symptome deutlich verringern und gut leben. || pause=0.6
+{support}Deshalb ist frühe Unterstützung so wichtig. {talk}Wer bei sich oder anderen Veränderungen bemerkt, sollte darüber sprechen – {talk2}mit Vertrauenspersonen, in der Hausarztpraxis oder in der Kinder- und Jugendpsychiatrie. || pause=1.0
+{end}Denn Risiko ist nicht Schicksal. || pause=1.0

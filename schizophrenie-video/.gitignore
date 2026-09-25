@@ -1,0 +1,8 @@
+node_modules/
+audio/*.wav
+audio/sentences/
+__pycache__/
+tools/.gp_*
+render/*
+!render/final.mp4
+!render/preview.mp4

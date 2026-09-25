@@ -1,0 +1,17 @@
+{
+  "name": "schizophrenie-erklaervideo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Deutsches wissenschaftliches Motion-Graphics-Erklärvideo: Die Entstehung von Schizophrenie bei Kindern und Jugendlichen",
+  "type": "module",
+  "scripts": {
+    "narration": "python3 tools/build_narration.py",
+    "audio": "python3 tools/build_audio.py",
+    "preview": "node tools/serve.mjs",
+    "render": "node tools/render.mjs",
+    "stills": "node tools/stills.mjs"
+  },
+  "devDependencies": {
+    "playwright-core": "1.56.1"
+  }
+}

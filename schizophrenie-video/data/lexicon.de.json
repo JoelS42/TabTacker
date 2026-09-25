@@ -1,0 +1,28 @@
+{
+  "_info": "Aussprache-Lexikon: Anzeige-Schreibweise -> gesprochene Form. 'substring' wird innerhalb von Wörtern ersetzt, 'word' nur für ganze Wörter (ohne Satzzeichen). Gilt für alle TTS-Engines.",
+  "substring": {
+    "NMDA": "N-M-D-A",
+    "22q11.2": "zweiundzwanzig-Ku-elf-Punkt-zwei",
+    "CB1": "Ce-Be-eins",
+    "THC": "Te-Ha-Ce",
+    "Pruning": "Pruhning",
+    "D-Serin": "De-Serin",
+    "C4A": "Ce-vier-A",
+    "„": "",
+    "“": ""
+  },
+  "word": {
+    "C1q": "Ce-eins-Ku",
+    "C3": "Ce-drei",
+    "C4": "Ce-vier",
+    "DNA": "De-En-A",
+    "76.000": "sechsundsiebzigtausend",
+    "287": "zweihundertsiebenundachtzig",
+    "2016": "zweitausendsechzehn",
+    "22": "zweiundzwanzig",
+    "-Freisetzung": "Freisetzung",
+    "–": ",",
+    "18.": "achtzehnten",
+    "13.": "dreizehnten"
+  }
+}
