@@ -27,7 +27,7 @@ export function serve(port = 8080) {
     res.writeHead(200, { 'Content-Type': type, 'Content-Length': stat.size, 'Accept-Ranges': 'bytes', 'Cache-Control': 'no-cache' });
     fs.createReadStream(file).pipe(res);
   });
-  return new Promise((ok) => server.listen(port, '127.0.0.1', () => ok(server)));
+  return new Promise((ok) => server.listen(port, '127.0.0.1', () => { server.port = server.address().port; ok(server); }));
 }
 
 if (process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.argv[1])) {

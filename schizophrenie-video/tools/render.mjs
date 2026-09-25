@@ -24,13 +24,13 @@ const EXE = process.env.CHROME || '/opt/pw-browsers/chromium-1194/chrome-linux/c
 const TMP = path.join('render', 'tmp');
 fs.mkdirSync(TMP, { recursive: true });
 
-const server = await serve(8097);
+const server = await serve(0);
 const browser = await chromium.launch({ executablePath: EXE, args: ['--disable-gpu', '--force-color-profile=srgb', '--disable-background-timer-throttling'] });
 
 async function newPage() {
   const page = await browser.newPage({ viewport: { width: 1920, height: 1080 } });
   page.on('pageerror', (e) => { console.error('[pageerror]', e.message); process.exit(1); });
-  await page.goto(`http://127.0.0.1:8097/src/main.html?render=1&subs=${SUBS ? 1 : 0}`);
+  await page.goto(`http://127.0.0.1:${server.port}/src/main.html?render=1&subs=${SUBS ? 1 : 0}`);
   await page.waitForFunction(() => window.__render && window.__render.ready);
   await page.evaluate(() => window.__render.ready);
   return page;

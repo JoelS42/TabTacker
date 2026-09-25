@@ -4,11 +4,11 @@ import fs from 'node:fs';
 import { serve } from './serve.mjs';
 
 const EXE = process.env.CHROME || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome';
-const server = await serve(8098);
+const server = await serve(0);
 const browser = await chromium.launch({ executablePath: EXE, args: ['--disable-gpu'] });
 const page = await browser.newPage({ viewport: { width: 1920, height: 1080 } });
 page.on('pageerror', (e) => { console.error(e.message); process.exit(1); });
-await page.goto('http://127.0.0.1:8098/src/main.html?render=1');
+await page.goto(`http://127.0.0.1:${server.port}/src/main.html?render=1`);
 await page.waitForFunction(() => window.__render && window.__render.ready);
 const ev = await page.evaluate(() => window.__render.sfxEvents());
 const missing = await page.evaluate(() => window.__render.missingCues());
